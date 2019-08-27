@@ -1,0 +1,8 @@
+.image {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.images_wrap{
+    display: flex;
+    flex-wrap: wrap;
+}
