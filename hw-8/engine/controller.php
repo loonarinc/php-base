@@ -70,7 +70,7 @@ function prepareVariables($page, $action, $id)
             break;
         case "order":
             doOrderAction($params, $action, $id);
-            //$params['order'] = getOrder($id);
+            $params['orders'] = getMyOrders();
             break;
         case 'api':
             if ($action == "buy") {
@@ -88,6 +88,33 @@ function prepareVariables($page, $action, $id)
                 deleteFromBasket($id);
                 $params['count'] = getBasketCount();
                 $params['summ'] = summFromBasket();
+                $params['id'] = $id;
+                header("Content-type: application/json");
+                echo json_encode($params);
+                die();
+            }
+            if ($action == "orderComplete"){
+                $data = json_decode(file_get_contents('php://input'));
+                $id = (int)$data->id;
+                orderComplete($id);
+                $params['id'] = $id;
+                header("Content-type: application/json");
+                echo json_encode($params);
+                die();
+            }
+            if ($action == "orderDelete"){
+                $data = json_decode(file_get_contents('php://input'));
+                $id = (int)$data->id;
+                orderDelete($id);
+                $params['id'] = $id;
+                header("Content-type: application/json");
+                echo json_encode($params);
+                die();
+            }
+            if ($action == "orderCancel"){
+                $data = json_decode(file_get_contents('php://input'));
+                $id = (int)$data->id;
+                orderCancel($id);
                 $params['id'] = $id;
                 header("Content-type: application/json");
                 echo json_encode($params);

@@ -22,7 +22,7 @@
                     $('#counter').html(answer.count);
                     console.log(answer);
                 })();
-       });
+            });
 
             $(".delete").on('click', function (e) {
                 let id = e.target.id;
@@ -43,14 +43,69 @@
                     console.log(answer);
                 })();
             });
+            $(".btn_process").on('click', function (e) {
+                let id = e.target.id;
+                (async () => {
+                    const response = await fetch('/api/orderComplete/', {
+                        method: 'POST',
+                        headers: new Headers({
+                            'Content-Type': 'application/json'
+                        }),
+                        body: JSON.stringify({
+                            id: id
+                        }),
+                    });
+                    const answer = await response.json();
+                    $("#order-" + answer.id + " td.status").text("Проведен");
+                    $("#order-" + answer.id + " button.btn_process").remove();
+                    console.log(answer);
+                })();
+            });
+            $(".btn_remove").on('click', function (e) {
+                let id = e.target.id;
+                (async () => {
+                    const response = await fetch('/api/orderDelete/', {
+                        method: 'POST',
+                        headers: new Headers({
+                            'Content-Type': 'application/json'
+                        }),
+                        body: JSON.stringify({
+                            id: id
+                        }),
+                    });
+                    const answer = await response.json();
+                    $('#order-' + answer.id).remove();
+                    console.log(answer);
+                })();
+            });
+            $(".btn_cancel").on('click', function (e) {
+                let id = e.target.id;
+                (async () => {
+                    const response = await fetch('/api/orderCancel/', {
+                        method: 'POST',
+                        headers: new Headers({
+                            'Content-Type': 'application/json'
+                        }),
+                        body: JSON.stringify({
+                            id: id
+                        }),
+                    });
+                    const answer = await response.json();
+                    $("#order-" + answer.id + " td.status").text("Отменён");
+                    $("#order-" + answer.id + " button.btn_cancel").remove();
+                    console.log(answer);
+                })();
+            });
         });
 
+
     </script>
+
 </head>
 <body>
 <p>
-<?=$menu?>
+    <?= $menu ?>
 </p>
-<?=$content?>
+<?= $content ?>
 </body>
 </html>

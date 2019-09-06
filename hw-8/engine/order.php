@@ -10,6 +10,13 @@ function addOrder()
     if (mysqli_affected_rows(getDb()) != 1) return false;
     return $result;
 }
+function getMyOrders() {
+    $session_id = session_id();
+    $sql = "SELECT * FROM `orders` WHERE `session_id` = '{$session_id}';";
+    $orders = getAssocResult($sql);
+    return $orders;
+
+}
 
 function doOrderAction(&$params, $action, $id)
 {
@@ -19,11 +26,17 @@ function doOrderAction(&$params, $action, $id)
     if ($action == "add") {
         if (addOrder()){
             session_destroy();
-            setcookie("PHPSESSID", "", time() - 3600, "/");
+            setcookie("hash", "", time() - 3600, "/");
             header("Location: /order/?orderstatus=ORDER_OK");
         }
         else
             header("Location: /order/?orderstatus=ORDER_ERR");
 
     }
+}
+function orderCancel($id) {
+    $id=(int)$id;
+    $sql = "UPDATE `orders` SET status = 'canceled' WHERE id={$id};";
+    return executeQuery($sql);
+
 }
