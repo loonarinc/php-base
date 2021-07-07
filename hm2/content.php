@@ -1,0 +1,1 @@
+<div class="content">Содержимое сайта</div>
